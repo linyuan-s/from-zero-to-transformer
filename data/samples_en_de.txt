@@ -1,0 +1,16 @@
+--- 数据样本 (用于展示数据格式) ---
+
+[样本 1]
+EN: A boy in a red hat holding on to some railings.
+DE: Wännliches Kleinkind in einem roten Hut, das sich an einem Geländer festhält.
+---
+
+[样本 2]
+EN: Two young, White males are outside near many bushes.
+DE: Zwei junge weiße Männer sind im Freien in der Nähe vieler Büsche.
+---
+
+[样本 3]
+EN: A man in a blue shirt is standing on a ladder cleaning a window.
+DE: Ein Mann in einem blauen Hemd steht auf einer Leiter und putzt ein Fenster.
+---

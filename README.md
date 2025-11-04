@@ -1,10 +1,3 @@
-好的，没问题。
-
-你希望我提供上一份 `README.md` 的完整 Markdown 原始代码，**并且移除 "参考文献" (References) 部分**。
-
-这是你需要的、已修改的 Markdown 原始代码：
-
-```markdown
 # 从零实现 Transformer (Encoder-Decoder)
 
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
@@ -13,7 +6,7 @@
 
 这是我的“大模型基础与应用”课程的中期作业。
 
-本项目包含了一个完整的 **Encoder-Decoder Transformer** 模型的“从零开始”实现，严格遵循了 [1] Vaswani 等人在 2017 年的经典论文 **"Attention Is All You Need"** 中的架构。
+本项目包含了一个完整的 **Encoder-Decoder Transformer** 模型的“从零开始”实现。
 
 该模型使用 PyTorch 框架搭建，并在 `bentrevett/multi30k` 数据集上训练，以完成一个**英-德机器翻译**任务。
 
@@ -38,29 +31,23 @@
 * **可复现性**: 项目包含了完整的复现脚本和详细的环境说明。
 
 ## 仓库结构
+```plaintext
+├── checkpoints/     \# (被 .gitignore 忽略) 存放训练好的 .pt 模型文件
+├── data/            \# 包含数据样本和 README，用于说明数据格式
+├── results/         \# 存放训练和验证损失曲线图
+├── scripts/         \# 包含一键运行的 run.sh 脚本
+├── src/             \# 包含所有的 Python 源代码
+│   ├── model.py           \# (Transformer 架构)
+│   ├── data_loader.py     \# (PyTorch Dataset 和 DataLoader)
+│   ├── build_tokenizer.py \# (训练 WordPiece 分词器)
+│   ├── train.py           \# (主训练和评估循环, 包含优化)
+│   ├── train_baseline.py  \# (用于复现“基线”实验的脚本)
+│   └── utils.py           \# (掩码创建函数)
+├── .gitignore
+├── requirements.txt \# 所有的 Python 依赖
+└── README.md        \# (本文档)
 
 ```
-
-.
-├── checkpoints/    \# (被 .gitignore 忽略) 存放训练好的 .pt 模型文件
-├── data/           \# 包含数据样本和 README，用于说明数据格式
-├── results/        \# 存放训练和验证损失曲线图
-├── scripts/        \# 包含一键运行的 run.sh 脚本
-├── src/            \# 包含所有的 Python 源代码
-│   ├── model.py            \# (Transformer 架构)
-│   ├── data\_loader.py    \# (PyTorch Dataset 和 DataLoader)
-│   ├── build\_tokenizer.py  \# (训练 WordPiece 分词器)
-│   ├── train.py            \# (主训练和评估循环, 包含优化)
-│   ├── train\_baseline.py   \# (用于复现“基线”实验的脚本)
-│   └── utils.py            \# (掩码创建函数)
-├── .gitignore
-├── requirements.txt  \# 所有的 Python 依赖
-└── README.md         \# (本文档)
-
-````
-*(注：`train_ad.py` 和 `train.py` 对应你日志中的优化前和优化后脚本)*
-
----
 
 ## 环境设置与安装
 
@@ -77,7 +64,7 @@
 
 **克隆仓库:**
 ```bash
-git clone [https://github.com/linyuan-s/from-zero-to-transformer.git](https://github.com/linyuan-s/from-zero-to-transformer.git)
+git clone https://github.com/linyuan-s/from-zero-to-transformer.git
 cd from-zero-to-transformer
 ````
 
@@ -91,8 +78,8 @@ conda activate transformer
 **安装所有依赖 (包括 PyTorch Nightly):**
 
 ```bash
-# 警告：此命令会安装一个非常大的、为 CUDA 12.8 编译的 PyTorch Nightly 版
-# 请确保你的网络连接稳定
+# 此命令会安装一个非常大的、为 CUDA 12.8 编译的 PyTorch Nightly 版
+# 请确保网络连接稳定
 pip install -r requirements.txt
 ```
 
@@ -110,7 +97,7 @@ bash scripts/run.sh
 
 ### 2\. (手动) 分步运行
 
-如果你想手动执行每个步骤：
+如果想手动执行每个步骤：
 
 **第一步: 训练分词器**
 (此步骤会读取 `multi30k` 数据集并创建 `tokenizers/` 文件夹)
@@ -120,21 +107,21 @@ python src/build_tokenizer.py
 ```
 
 **第二步: 开始训练 (baseline)**
-(此步骤会运行带学习率调度器的训练)
+
 
 ```bash
-python src/train.py
+python src/train_baseline.py
 ```
 
 **(复现) 运行NO_PE模型 (用于消融实验)**
 
 ```bash
-python src/train_ad.py --no-pe
+python src/train.py --no-pe
 ```
 **(复现) 运行优化模型**
 
 ```bash
-python src/train_ad.py
+python src/train_.py
 ```
 
 ## 实验结果与分析
@@ -150,22 +137,18 @@ python src/train_ad.py
 ### 1\. 实验 A: 消融实验 (移除位置编码)
 
   * **描述**: 为了验证位置编码 (Positional Encoding) 的重要性，我进行了一组消融实验，将其从模型中移除。
-  * **发现**: 如图所示，训练损失仍然下降，但验证损失明显高于其他实验 (最佳约 3.1，对应PPL \~22.2)。这证明了 Transformer 模型在没有位置信息时，学习翻译任务的能力严重受限。
+  * **发现**: 如图training_validation_loss_NO_PE.png所示，训练损失仍然下降，但验证损失明显高于其他实验 (最佳约 3.1，对应PPL \~22.2)。这证明了 Transformer 模型在没有位置信息时，学习翻译任务的能力严重受限。
 
-![alt text](image.png)
 
 ### 2\. 实验 B: 基线模型 (有位置编码, 无调度器)
 
-  * **描述**: 这是我们的基线模型，它包含了所有核心组件，但使用固定的 `3e-4` 学习率。
-  * **发现**: 模型学习有效，在 Epoch 06 验证 PPL 达到了最低点 **15.987** (损失 2.772)。在此之后，如图所示，训练损失继续下降，而验证损失迅速反弹，显示出在小数据集上的严重过拟合。
+  * **描述**: 这是基线模型，它包含了所有核心组件，但使用固定的 `3e-4` 学习率。
+  * **发现**: 模型学习有效，在 Epoch 06 验证 PPL 达到了最低点 **15.987** (损失 2.772)。在此之后，如图优化前train_val_loss.png所示，训练损失继续下降，而验证损失迅速反弹，显示出在小数据集上的严重过拟合。
 
-![alt text](优化前train_val_loss.png)
 
 ### 3\. 实验 C: 优化模型 (有位置编码 + 学习率调度器)
 
   * **描述**: 为解决实验 B 中的过拟合问题，我们引入了作业“进阶”要求中的 `ReduceLROnPlateau` 学习率调度器。
   * **发现**: 优化取得了成功。
       * 模型的最佳 PPL 被进一步降低至 **15.941** (损失 2.769)，在 Epoch 09 达到。
-      * 更重要的是，如图所示，在模型过拟合后，调度器成功抑制了验证损失的剧烈反弹，使其趋于稳定（收敛在 2.8 左右），而不是像基线模型那样持续恶化。
-
-![alt text](loss_curve_20251104_171318.png)
+      * 更重要的是，如图loss_curve_20251104_171318.png所示，在模型过拟合后，调度器成功抑制了验证损失的剧烈反弹，使其趋于稳定（收敛在 2.8 左右），而不是像基线模型那样持续恶化。
